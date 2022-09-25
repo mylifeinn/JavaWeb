@@ -53,7 +53,7 @@
         <td>
             <a href="javascript:void(0)" onclick="window.confirm('亲，确认删除数据吗？')">删除</a>
             <a href="<%=request.getContextPath()%>/edit.jsp">修改</a>
-            <a href="<%=request.getContextPath()%>/detail.jsp">详情</a>
+            <a href="<%=request.getContextPath()%>/dept/detail?dno=<%=dept.getDeptno()%>">详情</a>
         </td>
     </tr>
 

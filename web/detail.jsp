@@ -1,4 +1,10 @@
+<%@ page import="com.huawei.oa.bean.Dept" %>
 <%@page contentType="text/html;charset=UTF-8"%>
+<%
+//从request域中取出数据
+    Dept d=(Dept)request.getAttribute("dept");
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,9 +16,9 @@
 <body>
 <h1>部门详情</h1>
 <hr>
-部门编号：20 <br>
-部门名称：销售部 <br>
-部门位置：北京 <br>
+部门编号：<%=d.getDeptno()%> <br>
+部门名称：<%=d.getDname()%> <br>
+部门位置：<%=d.getLoc()%> <br>
 
 <input type="button" value="后退" onclick="window.history.back()"/>
 </body>
