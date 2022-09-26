@@ -15,11 +15,12 @@
 
 <script type="text/javascript">
     function del(dno) {
-        var ok = window.confirm("亲，删除不可恢复哦！");
+        var ok = window.confirm("亲，删了不可恢复哦！");
         if (ok) {
             document.location.href = "<%=request.getContextPath()%>/dept/delete?deptno=" + dno;
         }
     }
+
 </script>
 
 <h1 align="center">部门列表</h1>
@@ -36,7 +37,7 @@
         //从reuqest域当中取出集合
         List<Dept> deptList = (List<Dept>) request.getAttribute("deptList");
         //循环遍历
-        int i=0;
+        int i = 0;
         for (Dept dept : deptList) {
             //后台输出
             //System.out.println(dept.getDname());
@@ -47,13 +48,16 @@
     <%--<br>--%>
 
     <tr>
-        <td><%=++i%></td>
-        <td><%=dept.getDeptno()%></td>
-        <td><%=dept.getDname()%></td>
+        <td><%=++i%>
+        </td>
+        <td><%=dept.getDeptno()%>
+        </td>
+        <td><%=dept.getDname()%>
+        </td>
         <td>
-            <a href="javascript:void(0)" onclick="window.confirm('亲，确认删除数据吗？')">删除</a>
-            <a href="<%=request.getContextPath()%>/edit.jsp">修改</a>
-            <a href="<%=request.getContextPath()%>/dept/detail?dno=<%=dept.getDeptno()%>">详情</a>
+            <a href="javascript:void(0)" onclick="del(<%=dept.getDeptno()%>)">删除</a>
+            <a href="<%=request.getContextPath()%>/dept/detail?f=edit&dno=<%=dept.getDeptno()%>">修改</a>
+            <a href="<%=request.getContextPath()%>/dept/detail?f=detail&dno=<%=dept.getDeptno()%>">详情</a>
         </td>
     </tr>
 
