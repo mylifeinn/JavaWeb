@@ -13,9 +13,18 @@
 
 <%--<a href="<%=request.getContextPath()%>/list.jsp">查看部门列表</a>--%>
 
-<a href="<%=request.getContextPath()%>/dept/list">查看部门列表</a>
+<%--<a href="<%=request.getContextPath()%>/dept/list">查看部门列表</a>--%>
 
+<%--<hr>--%>
+<%--<%=request.getContextPath()%>--%>
+
+<h1>LOGIN PAGE</h1>
 <hr>
-<%=request.getContextPath()%>
+<form action="<%=request.getContextPath()%>/user/login" method="post">
+    username:<input type="text" name="username"><br>
+    password:<input type="password" name="password"><br>
+    <input type="submit" value="login">
+
+</form>
 </body>
 </html>
