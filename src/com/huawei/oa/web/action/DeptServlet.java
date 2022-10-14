@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,35 +25,45 @@ import java.util.List;
  * @Modified By:
  */
 
-@WebServlet({"/dept/list", "/dept/detail", "/dept/delete", "/dept/save","/dept/modify"})
+@WebServlet({"/dept/list", "/dept/detail", "/dept/delete", "/dept/save", "/dept/modify"})
 
 public class DeptServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String servletPath = request.getServletPath();
-        if ("/dept/list".equals(servletPath)) {
-            doList(request, response);
-        } else if ("/dept/detail".equals(servletPath)) {
-            doDetail(request, response);
-        } else if ("/dept/delete".equals(servletPath)) {
-            doDel(request, response);
-        } else if ("/dept/save".equals(servletPath)) {
-            doSave(request,response);
-        }else if ("/dept/modify".equals(servletPath)) {
-            doModify(request,response);
+        //获取session（这个session是不需要新建的）
+        //只是获取当前的session，获取不到则返回null
+        HttpSession session=request.getSession(false);
+        if (session!=null&&session.getAttribute("username")!=null) {
+            String servletPath = request.getServletPath();
+            if ("/dept/list".equals(servletPath)) {
+                doList(request, response);
+            } else if ("/dept/detail".equals(servletPath)) {
+                doDetail(request, response);
+            } else if ("/dept/delete".equals(servletPath)) {
+                doDel(request, response);
+            } else if ("/dept/save".equals(servletPath)) {
+                doSave(request, response);
+            } else if ("/dept/modify".equals(servletPath)) {
+                doModify(request, response);
+            }
+        } else {
+            //跳转到登录页面
+            response.sendRedirect(request.getContextPath());//访问web站点的根，自动找到欢迎页面
         }
     }
 
+
     /**
      * 修改部门
+     *
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
     private void doModify(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         //解决请求体的中文乱码问题
         request.setCharacterEncoding("UTF-8");
         //获取表单中的数据
@@ -81,7 +92,7 @@ public class DeptServlet extends HttpServlet {
         if (count == 1) {
             //更新成功
             //跳转到部门列表页面（部门列表是通过java程序动态生成的，所以还需要再次执行另一个Servlet
-            request.getRequestDispatcher("/dept/list").forward(request,response);
+            request.getRequestDispatcher("/dept/list").forward(request, response);
         }
     }
 
@@ -139,6 +150,7 @@ public class DeptServlet extends HttpServlet {
      */
     private void doDel(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.getSession(false);
         //获取部门编号
         String deptno = request.getParameter("deptno");
         //连接数据库，删除部门
@@ -221,8 +233,8 @@ public class DeptServlet extends HttpServlet {
         }*/
 
 
-        String forward="/"+request.getParameter("f")+".jsp";
-        request.getRequestDispatcher(forward).forward(request,response);
+        String forward = "/" + request.getParameter("f") + ".jsp";
+        request.getRequestDispatcher(forward).forward(request, response);
 
     }
 

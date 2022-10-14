@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,10 +23,32 @@ import java.sql.SQLException;
 
 //Servlet负责业务的处理
 //JSP负责页面展示
-@WebServlet("/user/login")
+@WebServlet({"/user/login","/user/exit"})
 public class UserServlet extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void service(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String servletPath = request.getServletPath();
+        if ("/user/login".equals(servletPath)){
+            doLogin(request,response);
+        }else if("/user/exit".equals(servletPath)){
+            doExit(request,response);
+        }
+    }
+
+    protected void doExit(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //获取seeion对象，销毁session
+        HttpSession session = request.getSession(false);
+        if (session!=null){
+            //手动销毁session
+            session.invalidate();
+            //跳转到登录页面
+            response.sendRedirect(request.getContextPath());
+        }
+    }
+
+    protected void doLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         boolean success = false;
         //我要做意见什么事？验证用户名和密码是否正确
@@ -59,6 +82,10 @@ public class UserServlet extends HttpServlet {
         }
         //登录成功/失败
         if (success) {
+            //获取session对象，这里的要求是：必须获取到session，没有也得新建一个session对象
+            HttpSession session=request.getSession();//session对象一定不是Null
+            session.setAttribute("username",username);
+
             //成功，跳转到用户列表页面
             response.sendRedirect(request.getContextPath()+"/dept/list");
         } else {

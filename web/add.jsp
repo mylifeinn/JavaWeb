@@ -9,6 +9,7 @@
     <title>新增部门</title>
 </head>
 <body>
+<h3>欢迎<%=session.getAttribute("username")%></h3>
     <h1>新增部门</h1>
     <hr>
     <form action="<%=request.getContextPath()%>/dept/save" method="post">

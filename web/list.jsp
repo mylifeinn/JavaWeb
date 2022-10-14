@@ -1,6 +1,8 @@
 <%@ page import="com.huawei.oa.bean.Dept" %>
 <%@ page import="java.util.List" %>
 <%@page contentType="text/html;charset=UTF-8" %>
+<%--毙掉session对象。写上这个，内置对象就不能用了。--%>
+<%--<%@page session="false"%>--%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +14,9 @@
 </head>
 
 <body>
-
+<%--显示一个登录名--%>
+<h3>欢迎<%=session.getAttribute("username")%></h3>
+<a href="<%=request.getContextPath()%>/user/exit">[退出登录]</a>
 <script type="text/javascript">
     function del(dno) {
         var ok = window.confirm("亲，删了不可恢复哦！");
