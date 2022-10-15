@@ -4,10 +4,7 @@ import com.huawei.oa.utils.DBUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,7 +41,7 @@ public class UserServlet extends HttpServlet {
             //手动销毁session
             session.invalidate();
             //跳转到登录页面
-            response.sendRedirect(request.getContextPath());
+            response.sendRedirect(request.getContextPath()+"/index.jsp");
         }
     }
 
@@ -85,6 +82,24 @@ public class UserServlet extends HttpServlet {
             //获取session对象，这里的要求是：必须获取到session，没有也得新建一个session对象
             HttpSession session=request.getSession();//session对象一定不是Null
             session.setAttribute("username",username);
+
+            //登录成功了，并且用户确实选择了“十天内免登录”功能。
+            String f=request.getParameter("f");
+            if ("1".equals(f)){
+                //创建Cookie对象,存储登录名
+                Cookie cookie1=new Cookie("username",username);
+                //创建Cookie对象存储密码
+                Cookie cookie2 = new Cookie("password", password);//真实情况是加密的
+                //设置cookie的有效期为10天
+                cookie1.setMaxAge(60*60*24*10);
+                cookie2.setMaxAge(60*60*24*10);
+                //设置cookie的path（只要访问这个应用，浏览器就一定要携带这两个cookie）
+                cookie1.setPath(request.getContextPath());
+                cookie2.setPath(request.getContextPath());
+                //响应cookie给浏览器
+                response.addCookie(cookie1);
+                response.addCookie(cookie2);
+            }
 
             //成功，跳转到用户列表页面
             response.sendRedirect(request.getContextPath()+"/dept/list");

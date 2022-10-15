@@ -49,7 +49,7 @@ public class DeptServlet extends HttpServlet {
             }
         } else {
             //跳转到登录页面
-            response.sendRedirect(request.getContextPath());//访问web站点的根，自动找到欢迎页面
+            response.sendRedirect(request.getContextPath()+"/index.jsp");//访问web站点的根，自动找到欢迎页面
         }
     }
 
